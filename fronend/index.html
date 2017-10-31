@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		.wrap{
+			width: 500px;
+			height: auto;
+			margin: 60px auto;
+			background: yellow
+		}
+		#m{
+			width: 300px;
+			height: 50px;
+		}
+		main{
+			width: 100%;
+			height: auto;
+			background: red
+		}
+	</style>
+</head>
+<body>
+<div class="wrap">
+	<p>Name :</p>
+	<input type="text" id="n">
+	<p>message :</p>
+	<input type="text" id="m">
+	<button id="btn">提交</button>
+	<main></main>
+</div>
+	<script>
+		
+		$(function(){
+			
+			$('#btn').click(function(){
+			
+			var m=$('#m').val()
+			var n=$('#n').val()
+			console.log(m)
+			console.log(n)
+				
+					$.ajax({
+						url:'http://localhost:3000/list',
+						type:'POST',
+						dataType:'json',
+						data:{
+							"name":n,
+							"message":m
+						},
+						success:function(e){
+							$.ajax({
+								url:'http://localhost:3000',
+								type:'post',
+								dataType:'json',
+								success:function(e){
+									var str="";
+									for(var i in e){
+										str+="<div><p>"+e[i].name+"</p><b>"+e[i].message+"</b><span data-id="+e[i].id+">X</span></div>";
+									}
+									$('main').html(str)
+										$('span').click(function(){
+											var a=$(this).attr("data-id");
+											var _this=$(this)
+
+												$.ajax({
+													url:'http://localhost:3000/del',
+													type:'post',
+													dataType:'json',
+													data:{
+														b:a
+													},
+													success:function(e){
+														console.log(e)
+														_this.parent().remove()
+												}
+											})
+
+										})
+									}
+
+								})
+							}
+						})
+				})
+		
+		
+		
+							$.ajax({
+								url:'http://localhost:3000',
+								type:'post',
+								dataType:'json',
+								success:function(e){
+							
+								for(var i in e){
+									$('main').append("<div><p>"+e[i].name+"</p><b>"+e[i].message+"</b><span data-id="+e[i].id+">X</span></div>")
+									}
+										
+								}
+							})
+		})
+
+		
+	</script>
+</body>
+</html>
